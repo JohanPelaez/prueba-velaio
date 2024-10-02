@@ -1,0 +1,78 @@
+<h2 mat-dialog-title>
+  <mat-icon>add_circle_outline</mat-icon> Crear Nueva Tarea
+</h2>
+<mat-dialog-content>
+  <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+    <fieldset>
+      <legend>Información de la tarea</legend>
+      <div>
+        <label for="name">Nombre:</label>
+        <input type="text" id="name" formControlName="name" placeholder="Ingrese el nombre de la tarea">
+        <div *ngIf="taskForm.get('name')?.invalid && (taskForm.get('name')?.dirty || taskForm.get('name')?.touched)">
+          <div *ngIf="taskForm.get('name')?.errors?.['required']">
+            El nombre es obligatorio.
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label for="description">Descripción:</label>
+        <textarea id="description" formControlName="description" placeholder="Ingrese una descripción (opcional)"></textarea>
+      </div>
+
+      <div>
+        <label for="dueDate">Fecha límite:</label>
+        <input type="date" id="dueDate" formControlName="dueDate">
+        <div *ngIf="taskForm.get('dueDate')?.invalid && (taskForm.get('dueDate')?.dirty || taskForm.get('dueDate')?.touched)">
+          <div *ngIf="taskForm.get('dueDate')?.errors?.['required']">
+            La fecha límite es obligatoria.
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Personas asignadas</legend>
+      <div formArrayName="assignedPeople">
+        <div *ngFor="let person of people.controls; let i = index" [formGroupName]="i">
+          <div>
+            <label for="personName{{ i }}">Nombre:</label>
+            <input type="text" id="personName{{ i }}" formControlName="name" placeholder="Ingrese el nombre de la persona">
+            <div *ngIf="person.get('name')?.invalid && (person.get('name')?.dirty || person.get('name')?.touched)">
+              <div *ngIf="person.get('name')?.errors?.['required']">
+                El nombre es obligatorio.
+              </div>
+            </div>
+          </div>
+          <div>
+            <label for="personAge{{ i }}">Edad:</label>
+            <input type="number" id="personAge{{ i }}" formControlName="age" placeholder="Ingrese la edad de la persona">
+            <div *ngIf="person.get('age')?.invalid && (person.get('age')?.dirty || person.get('age')?.touched)">
+              <div *ngIf="person.get('age')?.errors?.['required']">
+                La edad es obligatoria.
+              </div>
+              <div *ngIf="person.get('age')?.errors?.['min']">
+                La edad debe ser mayor o igual a 18.
+              </div>
+            </div>
+          </div>
+          <div formArrayName="skills">
+            <h4>Habilidades:</h4>
+            <div *ngFor="let skill of getSkills(i).controls; let j = index">
+              <input type="text" [formControlName]="j" placeholder="Ingrese una habilidad">
+              <button type="button" (click)="removeSkill(i, j)">Eliminar habilidad</button>
+            </div>
+            <button type="button" (click)="addSkill(i)">Añadir habilidad</button>
+          </div>
+          <button type="button" (click)="removePerson(i)">Eliminar persona</button>
+        </div>
+        <button type="button" (click)="addPerson()">Añadir persona</button>
+      </div>
+    </fieldset>
+
+    <div mat-dialog-actions>
+      <button mat-button type="button" [mat-dialog-close]="false">Cancelar</button>
+      <button mat-raised-button type="submit" color="primary" [disabled]="taskForm.invalid">Crear tarea</button>
+    </div>
+  </form>
+</mat-dialog-content>

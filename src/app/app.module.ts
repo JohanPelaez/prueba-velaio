@@ -1,8 +1,10 @@
+// app.module.ts
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { TaskManagerModule } from './features/task-manager/task-manager.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // Importa el módulo
 
 @NgModule({
   declarations: [
@@ -10,7 +12,8 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    TaskManagerModule,
+    BrowserAnimationsModule // Añádelo a los imports
   ],
   providers: [],
   bootstrap: [AppComponent]
